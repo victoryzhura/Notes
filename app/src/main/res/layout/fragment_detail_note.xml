@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/toolbar_detail_note"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@color/dark_gray"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/back_button"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/ic_baseline_arrow_back" />
+            </FrameLayout>
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/save_button"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/ic_baseline_check" />
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/edit_title_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/dark_gray"
+            android:hint="Title"
+            android:paddingStart="8dp"
+            android:singleLine="true"
+            android:textCursorDrawable="@drawable/cursor"
+            android:theme="@style/bubbleCursor"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_detail_note" />
+
+        <EditText
+            android:id="@+id/edit_note_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/dark_gray"
+            android:hint="@string/make_your_note"
+            android:paddingStart="8dp"
+            android:textCursorDrawable="@drawable/cursor"
+            android:theme="@style/bubbleCursor"
+            app:layout_constraintTop_toBottomOf="@id/edit_title_text" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
