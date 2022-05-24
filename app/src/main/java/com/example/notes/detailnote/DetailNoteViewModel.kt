@@ -14,4 +14,10 @@ class DetailNoteViewModel(private val database: NotesDatabaseDao) : ViewModel() 
             database.insert(note)
         }
     }
+
+    fun update(note: NoteItem) {
+        viewModelScope.launch(Dispatchers.IO) {
+            database.update(note)
+        }
+    }
 }

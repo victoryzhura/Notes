@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.notes.CommonViewModelFactory
 import com.example.notes.database.NotesDatabase
 import com.example.notes.databinding.FragmentNotesBinding
+import com.example.notes.entity.NoteItem
 
 class NotesFragment : Fragment() {
     private lateinit var binding: FragmentNotesBinding
@@ -37,7 +38,10 @@ class NotesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = NotesAdapter()
+        val adapter = NotesAdapter(callback = {
+            findNavController().navigate(NotesFragmentDirections.actionNotesFragmentToDetailNoteFragment(it))
+        })
+
         binding.notesRecycler.adapter = adapter
         binding.notesRecycler.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
@@ -48,7 +52,11 @@ class NotesFragment : Fragment() {
         }
 
         binding.addButton.setOnClickListener {
-            findNavController().navigate(NotesFragmentDirections.actionNotesFragmentToDetailNoteFragment())
+            findNavController().navigate(NotesFragmentDirections.actionNotesFragmentToDetailNoteFragment(
+                NoteItem()
+            ))
         }
+
+
     }
 }

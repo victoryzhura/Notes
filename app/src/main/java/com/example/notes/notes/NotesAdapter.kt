@@ -1,19 +1,17 @@
 package com.example.notes.notes
 
 import android.annotation.SuppressLint
-import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.notes.R
 import com.example.notes.databinding.ItemNotesBinding
 import com.example.notes.entity.NoteItem
+import com.example.notes.utility.Util.getDate
 
-class NotesAdapter :
+class NotesAdapter(private val callback: (NoteItem) -> Unit) :
     androidx.recyclerview.widget.ListAdapter<NoteItem, NotesAdapter.NotesHolder>(
         NotesCallback()
     ) {
@@ -26,8 +24,11 @@ class NotesAdapter :
             binding.cardTextNotes.setCardBackgroundColor(item.color)
             binding.timeNotes.isSelected = true
             binding.textNotesTitle.isSelected = true
+            binding.timeNotes.text = getDate(item.time, "EEE, d MMM, yyyy")
             binding.executePendingBindings()
-            Log.d("test1", "hghhg")
+            binding.root.setOnClickListener {
+                callback(item)
+            }
         }
     }
 

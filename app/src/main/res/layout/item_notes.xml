@@ -58,7 +58,7 @@
                 android:padding="8dp"
                 android:scrollHorizontally="true"
                 android:singleLine="true"
-                android:text="12-12 March 2021 years"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="14sp" />
 
