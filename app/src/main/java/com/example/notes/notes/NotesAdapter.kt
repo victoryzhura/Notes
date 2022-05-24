@@ -2,6 +2,7 @@ package com.example.notes.notes
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
@@ -11,7 +12,8 @@ import com.example.notes.databinding.ItemNotesBinding
 import com.example.notes.entity.NoteItem
 import com.example.notes.utility.Util.getDate
 
-class NotesAdapter(private val callback: (NoteItem) -> Unit) :
+
+class NotesAdapter(private val callback: (NoteItem) -> Unit, private val longCallback: (NoteItem, View)-> Unit) :
     androidx.recyclerview.widget.ListAdapter<NoteItem, NotesAdapter.NotesHolder>(
         NotesCallback()
     ) {
@@ -28,6 +30,10 @@ class NotesAdapter(private val callback: (NoteItem) -> Unit) :
             binding.executePendingBindings()
             binding.root.setOnClickListener {
                 callback(item)
+            }
+            binding.root.setOnLongClickListener {
+                longCallback(item, binding.root)
+                false
             }
         }
     }

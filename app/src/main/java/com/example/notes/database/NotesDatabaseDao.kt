@@ -14,7 +14,7 @@ interface NotesDatabaseDao {
     suspend fun insert(note: NoteItem)
 
     @Query("DELETE from notes_table WHERE id = :key")
-    suspend fun delete(key: String)
+    suspend fun delete(key: Int)
 
     @Update
     suspend fun update(note: NoteItem)

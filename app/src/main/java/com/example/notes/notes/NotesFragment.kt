@@ -1,14 +1,18 @@
 package com.example.notes.notes
 
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.notes.CommonViewModelFactory
+import com.example.notes.R
 import com.example.notes.database.NotesDatabase
 import com.example.notes.databinding.FragmentNotesBinding
 import com.example.notes.entity.NoteItem
@@ -39,7 +43,28 @@ class NotesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val adapter = NotesAdapter(callback = {
-            findNavController().navigate(NotesFragmentDirections.actionNotesFragmentToDetailNoteFragment(it))
+            findNavController().navigate(
+                NotesFragmentDirections.actionNotesFragmentToDetailNoteFragment(
+                    it
+                )
+            )
+        }, longCallback = { item, itemView ->
+            val popup = PopupMenu(requireContext(), itemView)
+            popup.menuInflater
+                .inflate(R.menu.popup_menu, popup.menu)
+
+            popup.setOnMenuItemClickListener {
+                if (it.itemId == R.id.delete)
+                    viewModelNotes.delete(item.id)
+                Toast.makeText(
+                    requireContext(),
+                    "You Clicked : " + item.title,
+                    Toast.LENGTH_SHORT
+                ).show()
+                true
+            }
+
+            popup.show()
         })
 
         binding.notesRecycler.adapter = adapter
@@ -52,9 +77,11 @@ class NotesFragment : Fragment() {
         }
 
         binding.addButton.setOnClickListener {
-            findNavController().navigate(NotesFragmentDirections.actionNotesFragmentToDetailNoteFragment(
-                NoteItem()
-            ))
+            findNavController().navigate(
+                NotesFragmentDirections.actionNotesFragmentToDetailNoteFragment(
+                    NoteItem()
+                )
+            )
         }
 
 
