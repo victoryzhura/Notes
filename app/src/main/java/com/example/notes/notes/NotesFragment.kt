@@ -16,6 +16,7 @@ import com.example.notes.R
 import com.example.notes.database.NotesDatabase
 import com.example.notes.databinding.FragmentNotesBinding
 import com.example.notes.entity.NoteItem
+import java.lang.Exception
 
 class NotesFragment : Fragment() {
     private lateinit var binding: FragmentNotesBinding
@@ -54,13 +55,13 @@ class NotesFragment : Fragment() {
                 .inflate(R.menu.popup_menu, popup.menu)
 
             popup.setOnMenuItemClickListener {
-                if (it.itemId == R.id.delete)
-                    viewModelNotes.delete(item.id)
-                Toast.makeText(
-                    requireContext(),
-                    "You Clicked : " + item.title,
-                    Toast.LENGTH_SHORT
-                ).show()
+                when (it.itemId) {
+                    R.id.delete -> viewModelNotes.delete(item.id)
+                    R.id.pin -> {
+                        item.isPined = !item.isPined
+                        viewModelNotes.update(item)
+                    }
+                }
                 true
             }
 
@@ -77,11 +78,15 @@ class NotesFragment : Fragment() {
         }
 
         binding.addButton.setOnClickListener {
-            findNavController().navigate(
-                NotesFragmentDirections.actionNotesFragmentToDetailNoteFragment(
-                    NoteItem()
+            try {
+                findNavController().navigate(
+                    NotesFragmentDirections.actionNotesFragmentToDetailNoteFragment(
+                        NoteItem()
+                    )
                 )
-            )
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
 
 

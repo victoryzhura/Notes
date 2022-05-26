@@ -13,6 +13,7 @@ import com.example.notes.R
 import com.example.notes.database.NotesDatabase
 import com.example.notes.databinding.FragmentDetailNoteBinding
 import com.example.notes.entity.NoteItem
+import com.example.notes.notes.NotesViewModel
 import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
@@ -20,7 +21,7 @@ import java.util.*
 class DetailNoteFragment : Fragment() {
 
     private lateinit var binding: FragmentDetailNoteBinding
-    private lateinit var viewModelNote: DetailNoteViewModel
+    private lateinit var viewModelNote: NotesViewModel
     private val args: DetailNoteFragmentArgs by navArgs()
 
 
@@ -37,7 +38,7 @@ class DetailNoteFragment : Fragment() {
         viewModelNote =
             ViewModelProvider(
                 this, viewModelFactory
-            )[DetailNoteViewModel::class.java]
+            )[NotesViewModel::class.java]
         return binding.root
     }
 

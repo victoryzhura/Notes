@@ -19,6 +19,7 @@ interface NotesDatabaseDao {
     @Update
     suspend fun update(note: NoteItem)
 
-    @Query("SELECT * from notes_table ORDER BY id DESC")
+    @Query("SELECT * from notes_table ORDER BY isPined DESC, id DESC")
     fun getAllNotes(): LiveData<List<NoteItem>>
+
 }
