@@ -1,21 +1,28 @@
 package com.example.notes.notes
 
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.notes.CommonViewModelFactory
 import com.example.notes.R
 import com.example.notes.database.NotesDatabase
 import com.example.notes.databinding.FragmentNotesBinding
 import com.example.notes.entity.NoteItem
+import com.example.notes.utility.hideKeyboard
 import java.lang.Exception
 
 class NotesFragment : Fragment() {
@@ -69,8 +76,8 @@ class NotesFragment : Fragment() {
         })
 
         binding.notesRecycler.adapter = adapter
-        binding.notesRecycler.layoutManager =
-            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        binding.notesRecycler.layoutManager = layoutManager
 
         viewModelNotes.listOfNotes.observe(viewLifecycleOwner) {
             adapter.submitList(it)
@@ -88,7 +95,38 @@ class NotesFragment : Fragment() {
                 e.printStackTrace()
             }
         }
+        binding.searchButton.setOnClickListener {
+            binding.isSearch = true
+        }
+        binding.cancelButton.setOnClickListener {
+            binding.isSearch = false
+            binding.searchEditText.setText("")
+            requireActivity().hideKeyboard()
+        }
+        binding.deleteAllText.setOnClickListener {
+            binding.searchEditText.setText("")
+        }
 
+        adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) {
+                binding.notesRecycler.scrollToPosition(0)
+            }
 
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                binding.notesRecycler.scrollToPosition(0)
+            }
+        })
+
+        binding.searchEditText.addTextChangedListener { editText ->
+            val list = mutableListOf<NoteItem>()
+            viewModelNotes.listOfNotes.value?.forEach {
+                if (it.text?.contains(editText.toString()) == true)
+                    list.add(it)
+            }
+
+            Log.d("list1", list.size.toString())
+            adapter.submitList(list)
+            binding.notesRecycler.scrollToPosition(0)
+        }
     }
 }
