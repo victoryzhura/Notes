@@ -20,7 +20,7 @@ class EnterFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = FragmentEnterBinding.inflate(inflater)
         return binding.root
@@ -41,12 +41,13 @@ class EnterFragment : Fragment() {
     private fun performLogin() {
         val email = binding.enterEmail.text.toString()
         val password = binding.enterPassword.text.toString()
+        val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex()
 
         val mAuth = FirebaseAuth.getInstance()
         val mUser = mAuth.currentUser
 
         when {
-            email.isEmpty() -> binding.enterErrorEmail.error = "Enter Email"
+            !email.matches(emailPattern) -> binding.enterErrorEmail.error = "Enter Email"
             password.length < 6 -> binding.enterErrorPassword.error =
                 "Password must be more than 6 symbols"
             else -> {

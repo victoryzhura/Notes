@@ -1,6 +1,7 @@
 package com.example.notes.detailnote
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,8 @@ import com.example.notes.databinding.FragmentDetailNoteBinding
 import com.example.notes.entity.NoteItem
 import com.example.notes.notes.NotesViewModel
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 
 
@@ -23,7 +26,6 @@ class DetailNoteFragment : Fragment() {
     private lateinit var binding: FragmentDetailNoteBinding
     private lateinit var viewModelNote: NotesViewModel
     private val args: DetailNoteFragmentArgs by navArgs()
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,15 +46,16 @@ class DetailNoteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.backButton.setOnClickListener {
             findNavController().popBackStack()
         }
 
-        if (args.noteItem.title.isNullOrEmpty() && args.noteItem.text.isNullOrEmpty()) {
+        if (args.noteItem.title.isNullOrEmpty() && args.noteItem.text.isNullOrEmpty())
             addNew()
-        } else {
+        else
             updateOld()
-        }
+
     }
 
     private fun addText(callback: (NoteItem) -> Unit) {
@@ -76,12 +79,27 @@ class DetailNoteFragment : Fragment() {
         addText {
             val androidColors = resources.getIntArray(R.array.material_colors)
             val randomAndroidColor = androidColors[Random().nextInt(androidColors.size)]
+            val saveTime = System.currentTimeMillis()
+
+            val fstore = FirebaseFirestore.getInstance()
+            val mAuth = FirebaseAuth.getInstance()
+            val userId = mAuth.currentUser?.uid
+            val documentReference = fstore.collection("users").document(userId!!).collection("notes").document(saveTime.toString())
+            val user = hashMapOf<String, Any>()
+
+            user["color"] = randomAndroidColor
+            user["title"] = binding.editTitleText.text.toString()
+            user["text"] = binding.editNoteText.text.toString()
+            user["time"] = saveTime
+
+            documentReference.set(user)
 
             viewModelNote.insert(
                 NoteItem(
                     color = randomAndroidColor,
                     title = binding.editTitleText.text.toString(),
-                    text = binding.editNoteText.text.toString()
+                    text = binding.editNoteText.text.toString(),
+                    time = saveTime
                 )
             )
         }

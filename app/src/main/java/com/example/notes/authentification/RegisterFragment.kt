@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.example.notes.MainActivity
 import com.example.notes.databinding.FragmentRegisterBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class RegisterFragment : Fragment() {
     private lateinit var binding: FragmentRegisterBinding
@@ -35,7 +36,6 @@ class RegisterFragment : Fragment() {
         val password = binding.registerPassword.text.toString()
         val confPassword = binding.registerConfPassword.text.toString()
         val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex()
-
 
         val mAuth = FirebaseAuth.getInstance()
         val mUser = mAuth.currentUser
