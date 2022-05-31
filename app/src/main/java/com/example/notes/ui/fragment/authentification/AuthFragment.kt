@@ -1,4 +1,4 @@
-package com.example.notes.authentification
+package com.example.notes.ui.fragment.authentification
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -30,5 +30,6 @@ class AuthFragment : Fragment() {
         binding.signUpButton.setOnClickListener {
             findNavController().navigate(AuthFragmentDirections.actionAuthFragmentToRegisterFragment())
         }
+
     }
 }

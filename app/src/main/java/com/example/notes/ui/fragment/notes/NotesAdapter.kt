@@ -1,4 +1,4 @@
-package com.example.notes.notes
+package com.example.notes.ui.fragment.notes
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.notes.R
 import com.example.notes.databinding.ItemNotesBinding
-import com.example.notes.entity.NoteItem
-import com.example.notes.utility.Util.getDate
+import com.example.notes.database.entity.NoteItem
+import com.example.notes.ui.utility.Util.getDate
 
 
 class NotesAdapter(private val callback: (NoteItem) -> Unit, private val longCallback: (NoteItem, View)-> Unit) :

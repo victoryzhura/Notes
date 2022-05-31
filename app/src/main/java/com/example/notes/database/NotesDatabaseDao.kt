@@ -5,7 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.example.notes.entity.NoteItem
+import com.example.notes.database.entity.NoteItem
 
 @Dao
 interface NotesDatabaseDao {
@@ -15,6 +15,9 @@ interface NotesDatabaseDao {
 
     @Query("DELETE from notes_table WHERE id = :key")
     suspend fun delete(key: Int)
+
+    @Query("DELETE from notes_table")
+    suspend fun clear()
 
     @Update
     suspend fun update(note: NoteItem)

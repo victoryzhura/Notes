@@ -1,9 +1,9 @@
-package com.example.notes.notes
+package com.example.notes.ui.fragment.notes
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.notes.database.NotesDatabaseDao
-import com.example.notes.entity.NoteItem
+import com.example.notes.database.entity.NoteItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -25,6 +25,12 @@ class NotesViewModel(private val database: NotesDatabaseDao) : ViewModel() {
     fun delete (key: Int){
         viewModelScope.launch(Dispatchers.IO) {
             database.delete(key)
+        }
+    }
+
+    fun clear () {
+        viewModelScope.launch(Dispatchers.IO) {
+            database.clear()
         }
     }
 

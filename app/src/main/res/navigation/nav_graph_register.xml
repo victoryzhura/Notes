@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/authFragment"
-        android:name="com.example.notes.authentification.AuthFragment"
+        android:name="com.example.notes.ui.fragment.authentification.AuthFragment"
         android:label="AuthFragment"
         tools:layout="@layout/fragment_auth">
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/enterFragment"
-        android:name="com.example.notes.authentification.EnterFragment"
+        android:name="com.example.notes.ui.fragment.authentification.EnterFragment"
         android:label="EnterFragment"
         tools:layout="@layout/fragment_enter">
         <action
@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.example.notes.authentification.RegisterFragment"
+        android:name="com.example.notes.ui.fragment.authentification.RegisterFragment"
         android:label="RegisterFragment"
         tools:layout="@layout/fragment_register"/>
 

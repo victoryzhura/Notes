@@ -19,4 +19,5 @@
         <item name="colorControlActivated">@color/dark_gray</item>
         <item name="colorControlHighlight">@color/dark_gray</item>
     </style>
+
 </resources>

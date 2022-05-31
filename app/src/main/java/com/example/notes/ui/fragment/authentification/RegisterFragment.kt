@@ -1,4 +1,4 @@
-package com.example.notes.authentification
+package com.example.notes.ui.fragment.authentification
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,10 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.notes.MainActivity
+import com.example.notes.App.Companion.mAuth
+import com.example.notes.ui.MainActivity
 import com.example.notes.databinding.FragmentRegisterBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 
 class RegisterFragment : Fragment() {
     private lateinit var binding: FragmentRegisterBinding
@@ -37,8 +37,6 @@ class RegisterFragment : Fragment() {
         val confPassword = binding.registerConfPassword.text.toString()
         val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex()
 
-        val mAuth = FirebaseAuth.getInstance()
-        val mUser = mAuth.currentUser
 
         when {
             !email.matches(emailPattern) -> binding.registerErrorEmail.error = "Enter correct Email"
@@ -49,7 +47,7 @@ class RegisterFragment : Fragment() {
             password != confPassword -> binding.registerErrorConfPassword.error =
                 "Password not match both field"
             else -> {
-                mAuth.createUserWithEmailAndPassword(email, password)
+                mAuth?.createUserWithEmailAndPassword(email, password)
                 val intent = Intent(requireContext(), MainActivity::class.java)
                 startActivity(intent)
                 requireActivity().finish()

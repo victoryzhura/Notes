@@ -1,7 +1,6 @@
-package com.example.notes.detailnote
+package com.example.notes.ui.fragment.detailnote
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,12 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.notes.CommonViewModelFactory
+import com.example.notes.ui.utility.CommonViewModelFactory
 import com.example.notes.R
 import com.example.notes.database.NotesDatabase
 import com.example.notes.databinding.FragmentDetailNoteBinding
-import com.example.notes.entity.NoteItem
-import com.example.notes.notes.NotesViewModel
+import com.example.notes.database.entity.NoteItem
+import com.example.notes.ui.fragment.notes.NotesViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore

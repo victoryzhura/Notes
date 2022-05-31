@@ -1,28 +1,29 @@
-package com.example.notes.notes
+package com.example.notes.ui.fragment.notes
 
 
-import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.example.notes.CommonViewModelFactory
+import com.example.notes.App.Companion.mAuth
+import com.example.notes.ui.utility.CommonViewModelFactory
 import com.example.notes.R
 import com.example.notes.database.NotesDatabase
 import com.example.notes.databinding.FragmentNotesBinding
-import com.example.notes.entity.NoteItem
-import com.example.notes.utility.hideKeyboard
+import com.example.notes.database.entity.NoteItem
+import com.example.notes.ui.MainActivity
+import com.example.notes.ui.RegisterActivity
+import com.example.notes.ui.utility.hideKeyboard
+import com.google.firebase.auth.FirebaseAuth
 import java.lang.Exception
 
 class NotesFragment : Fragment() {
@@ -124,9 +125,16 @@ class NotesFragment : Fragment() {
                     list.add(it)
             }
 
-            Log.d("list1", list.size.toString())
             adapter.submitList(list)
             binding.notesRecycler.scrollToPosition(0)
+        }
+
+        binding.logoutButton.setOnClickListener {
+            val intent = Intent(requireContext(), RegisterActivity::class.java)
+            mAuth?.signOut()
+            viewModelNotes.clear()
+            startActivity(intent)
+            requireActivity().finish()
         }
     }
 }

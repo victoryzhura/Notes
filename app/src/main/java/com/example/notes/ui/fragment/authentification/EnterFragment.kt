@@ -1,4 +1,4 @@
-package com.example.notes.authentification
+package com.example.notes.ui.fragment.authentification
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,7 +8,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.notes.MainActivity
+import com.example.notes.App.Companion.mAuth
+import com.example.notes.ui.MainActivity
 import com.example.notes.databinding.FragmentEnterBinding
 import com.google.firebase.auth.FirebaseAuth
 
@@ -43,15 +44,13 @@ class EnterFragment : Fragment() {
         val password = binding.enterPassword.text.toString()
         val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex()
 
-        val mAuth = FirebaseAuth.getInstance()
-        val mUser = mAuth.currentUser
 
         when {
             !email.matches(emailPattern) -> binding.enterErrorEmail.error = "Enter Email"
             password.length < 6 -> binding.enterErrorPassword.error =
                 "Password must be more than 6 symbols"
             else -> {
-                mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
+                mAuth?.signInWithEmailAndPassword(email, password)?.addOnCompleteListener {
                     if (it.isSuccessful) {
                         val intent = Intent(requireContext(), MainActivity::class.java)
                         startActivity(intent)
