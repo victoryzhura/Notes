@@ -90,7 +90,6 @@ class DetailNoteFragment : Fragment() {
             user["title"] = binding.editTitleText.text.toString()
             user["text"] = binding.editNoteText.text.toString()
             user["time"] = saveTime
-
             documentReference.set(user)
 
             viewModelNote.insert(
@@ -118,3 +117,4 @@ class DetailNoteFragment : Fragment() {
         binding.editNoteText.setText(oldItem.text)
     }
 }
+

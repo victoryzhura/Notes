@@ -20,10 +20,10 @@ import com.example.notes.R
 import com.example.notes.database.NotesDatabase
 import com.example.notes.databinding.FragmentNotesBinding
 import com.example.notes.database.entity.NoteItem
-import com.example.notes.ui.MainActivity
 import com.example.notes.ui.RegisterActivity
 import com.example.notes.ui.utility.hideKeyboard
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import java.lang.Exception
 
 class NotesFragment : Fragment() {
@@ -50,7 +50,7 @@ class NotesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        fbUpdate()
         val adapter = NotesAdapter(callback = {
             findNavController().navigate(
                 NotesFragmentDirections.actionNotesFragmentToDetailNoteFragment(
@@ -137,4 +137,29 @@ class NotesFragment : Fragment() {
             requireActivity().finish()
         }
     }
+
+    private fun fbUpdate() {
+        val fstore = FirebaseFirestore.getInstance()
+        val mAuth = FirebaseAuth.getInstance()
+        fstore.collection("users").document(mAuth.uid!!).collection("notes").get()
+            .addOnCompleteListener {
+                it.addOnSuccessListener {
+                    it.documents.forEach {
+                        val noteItem =
+                            it.toObject(NoteItem::class.java)
+                        val roomList = viewModelNotes.listOfNotes.value
+                        val note = roomList?.find {
+                            it.time == noteItem?.time
+                        }
+                        if (note == null && noteItem != null) {
+                            viewModelNotes.insert(noteItem)
+                        }
+                    }
+                }
+            }
+    }
 }
+
+
+//1. Создать функцию, которая берет список из рума, сравнивает с файдербейзвовським списком и того чего не хвататет добавляем в фаербейз
+//2. Если другое - синзронизируем, если меньше - добаавить чего нет, если больше - удалить
