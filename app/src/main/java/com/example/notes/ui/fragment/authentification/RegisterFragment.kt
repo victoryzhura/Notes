@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.notes.App
 import com.example.notes.App.Companion.mAuth
 import com.example.notes.ui.MainActivity
 import com.example.notes.databinding.FragmentRegisterBinding
@@ -26,9 +27,11 @@ class RegisterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.signUpButtonRegister.setOnClickListener {
             performAuth()
         }
+
     }
 
     private fun performAuth() {

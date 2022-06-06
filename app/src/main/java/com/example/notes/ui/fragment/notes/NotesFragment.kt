@@ -1,12 +1,14 @@
 package com.example.notes.ui.fragment.notes
 
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -15,16 +17,16 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.notes.App.Companion.mAuth
-import com.example.notes.ui.utility.CommonViewModelFactory
 import com.example.notes.R
 import com.example.notes.database.NotesDatabase
-import com.example.notes.databinding.FragmentNotesBinding
 import com.example.notes.database.entity.NoteItem
+import com.example.notes.databinding.FragmentNotesBinding
 import com.example.notes.ui.RegisterActivity
+import com.example.notes.ui.utility.CommonViewModelFactory
 import com.example.notes.ui.utility.hideKeyboard
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import java.lang.Exception
+
 
 class NotesFragment : Fragment() {
     private lateinit var binding: FragmentNotesBinding
@@ -64,7 +66,12 @@ class NotesFragment : Fragment() {
 
             popup.setOnMenuItemClickListener {
                 when (it.itemId) {
-                    R.id.delete -> viewModelNotes.delete(item.id)
+                    R.id.delete -> {
+                        val fstore = FirebaseFirestore.getInstance()
+                        viewModelNotes.delete(item.id)
+                        fstore.collection("users").document(mAuth?.uid!!).collection("notes")
+                            .document(item.time.toString()).delete()
+                    }
                     R.id.pin -> {
                         item.isPined = !item.isPined
                         viewModelNotes.update(item)
@@ -130,23 +137,19 @@ class NotesFragment : Fragment() {
         }
 
         binding.logoutButton.setOnClickListener {
-            val intent = Intent(requireContext(), RegisterActivity::class.java)
-            mAuth?.signOut()
-            viewModelNotes.clear()
-            startActivity(intent)
-            requireActivity().finish()
+            confirmDialog()
         }
     }
 
     private fun fbUpdate() {
         val fstore = FirebaseFirestore.getInstance()
-        val mAuth = FirebaseAuth.getInstance()
-        fstore.collection("users").document(mAuth.uid!!).collection("notes").get()
+        if (mAuth?.uid != null)
+        fstore.collection("users").document(mAuth?.uid!!).collection("notes").get()
             .addOnCompleteListener {
                 it.addOnSuccessListener {
-                    it.documents.forEach {
+                    it.documents.forEach { oneNoteItem ->
                         val noteItem =
-                            it.toObject(NoteItem::class.java)
+                            oneNoteItem.toObject(NoteItem::class.java)
                         val roomList = viewModelNotes.listOfNotes.value
                         val note = roomList?.find {
                             it.time == noteItem?.time
@@ -158,8 +161,26 @@ class NotesFragment : Fragment() {
                 }
             }
     }
+
+    private fun confirmDialog() {
+        val alert: AlertDialog = AlertDialog.Builder(
+            ContextThemeWrapper(requireContext(), R.style.Theme_Notes)
+        )
+            .create()
+        alert.setTitle("Logout")
+        alert.setMessage("Do you want to exit?")
+        alert.setCancelable(false)
+        alert.setCanceledOnTouchOutside(false)
+        alert.setButton(DialogInterface.BUTTON_POSITIVE, "Yes") { dialog, which ->
+            alert.dismiss()
+            val intent = Intent(requireContext(), RegisterActivity::class.java)
+            mAuth?.signOut()
+            viewModelNotes.clear()
+            startActivity(intent)
+            requireActivity().finish()
+
+        }
+        alert.setButton(DialogInterface.BUTTON_NEGATIVE, "No") { dialog, which -> alert.dismiss() }
+        alert.show()
+    }
 }
-
-
-//1. Создать функцию, которая берет список из рума, сравнивает с файдербейзвовським списком и того чего не хвататет добавляем в фаербейз
-//2. Если другое - синзронизируем, если меньше - добаавить чего нет, если больше - удалить
